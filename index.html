@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Community Meetup – Berlin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:      #F4F3EE;
+      --warm-grey:  #B1ADA1;
+      --dark:       #141413;
+      --orange:     #D97757;
+      --orange-dim: #c4623f;
+      --mid-grey:   #6b6860;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--dark);
+      font-family: 'Lora', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── layout ── */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(660px, 92vw);
+      padding: 80px 0 60px;
+    }
+
+    /* ── header ── */
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: rise 0.7s 0.1s forwards;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 600;
+      line-height: 1.12;
+      color: var(--dark);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: rise 0.7s 0.25s forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .city-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--mid-grey);
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: rise 0.7s 0.38s forwards;
+    }
+
+    /* ── divider ── */
+    .rule {
+      width: 48px;
+      height: 2px;
+      background: var(--orange);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: rise 0.7s 0.48s forwards;
+    }
+
+    /* ── body copy ── */
+    .intro {
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: var(--dark);
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: rise 0.7s 0.58s forwards;
+    }
+
+    .intro strong {
+      font-weight: 600;
+    }
+
+    /* ── hosts ── */
+    .hosts {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: rise 0.7s 0.72s forwards;
+    }
+
+    .host-card {
+      flex: 1 1 220px;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(177,173,161,0.4);
+      border-radius: 10px;
+      padding: 22px 24px;
+      backdrop-filter: blur(4px);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .host-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 4px 24px rgba(217,119,87,0.12);
+    }
+
+    .host-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .host-role {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--mid-grey);
+      margin-bottom: 14px;
+    }
+
+    .host-card a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--orange);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .host-card a:hover { border-color: var(--orange); }
+
+    /* ── socials section ── */
+    .socials-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid-grey);
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: rise 0.7s 0.86s forwards;
+    }
+
+    .socials {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: rise 0.7s 0.96s forwards;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: var(--dark);
+      color: var(--cream);
+      text-decoration: none;
+      border-radius: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .social-btn:hover {
+      background: var(--orange);
+      transform: translateY(-2px);
+    }
+
+    .social-btn svg {
+      width: 15px;
+      height: 15px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      width: min(660px, 92vw);
+      padding: 32px 0 48px;
+      border-top: 1px solid rgba(177,173,161,0.35);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--warm-grey);
+    }
+
+    footer p a {
+      color: var(--warm-grey);
+      text-decoration: none;
+      border-bottom: 1px solid var(--warm-grey);
+    }
+
+    /* ── animation ── */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 500px) {
+      .wrap { padding: 56px 0 40px; }
+      h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <p class="eyebrow">Community · Open · Independent</p>
+
+  <h1>Claude<br>Community<br><em>Meetup</em></h1>
+
+  <div class="rule"></div>
+
+  <p class="city-tag">LAUNCHING APRIL 2026</p>
+
+  <p class="intro">
+    We've crossed an event horizon with AI — these systems will increasingly shape how people work, create, and make decisions. That makes <strong>thoughtful community</strong> especially important. We're a group of enthusiasts building a space where people feel comfortable asking questions, sharing ideas, and growing together around Claude and the broader AI ecosystem.
+    <br><br>
+    Follow us on socials for updates on upcoming events.
+  </p>
+
+  <!-- hosts -->
+  <div class="hosts">
+    <div class="host-card">
+      <p class="host-name">William</p>
+      <p class="host-role">Technical</p>
+      <a href="https://de.linkedin.com/in/willmadden" target="_blank" rel="noopener">LinkedIn →</a>
+    </div>
+    <div class="host-card">
+      <p class="host-name">Chloe</p>
+      <p class="host-role">Policy</p>
+      <a href="https://linkedin.com/in/policyeconomist" target="_blank" rel="noopener">LinkedIn →</a>
+    </div>
+  </div>
+
+  <!-- socials -->
+  <p class="socials-label">Follow along</p>
+  <div class="socials">
+
+    <!-- X / Twitter -->
+    <a class="social-btn" href="https://x.com/claudemeetup" target="_blank" rel="noopener" aria-label="X (Twitter)">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+      X
+    </a>
+
+    <!-- Bluesky -->
+    <a class="social-btn" href="https://bsky.app/profile/claudemeetup.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+      <svg viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.922 453.32c-121.011 124.155-174.053-31.136-187.342-71.285-2.042-6.016-3.013-8.866-3.58-8.866-.568 0-1.538 2.85-3.58 8.866-13.289 40.149-66.331 195.44-187.342 71.285-62.522-64.76-33.3-129.52 81.675-149.07-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.66 0 75.293 0 57.947 0-28.906 76.134-1.611 123.121 33.664z"/></svg>
+      Bluesky
+    </a>
+
+
+  </div>
+
+</main>
+
+<footer>
+  <p>A community project. Not affiliated with or endorsed by Anthropic.</p>
+  <p><a href="/cdn-cgi/l/email-protection#c2aaa7aeaead82a1aea3b7a6a7afa7a7b6b7b2eca1adaf"><span class="
